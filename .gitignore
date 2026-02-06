@@ -3,7 +3,7 @@
 
 # dependencies
 node_modules/
-
+uploads/
 # builds
 dist/
 build/
