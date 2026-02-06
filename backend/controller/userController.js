@@ -100,8 +100,8 @@ export const postUserlogin = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "lax",
-            secure: false
+            sameSite: "none",
+            secure: true
         });
 
         return res.json({
@@ -133,8 +133,8 @@ export const logout = async (req, res) => {
     });
     res.clearCookie("token", {
         httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        secure: true,
     });
 
     res.json({
