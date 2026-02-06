@@ -26,16 +26,50 @@ const Wishlist = () => {
                 return
             }
         } catch (err) {
-            console.error(err)
             toast.error("Error connecting to the server")
         }
     }
 
+    const fetchWishlist = async () => {
+        const res = await fetch(`${URL}/wishlist`, {
+            credentials: "include"
+        });
+        const data = await res.json();
+
+        if (data.status === "success") {
+            // const ids = data.wishlist.map(item => String(item.perfume._id));
+            setWishlist(data.wishlist);
+        }
+    }
+
+    const removefromWishlist = async (id) => {
+        try {
+            const res = await fetch(`${URL}/wishlist/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            })
+            const data = await res.json()
+            if (data.status == 'success') {
+                setWishlist(prev => prev.filter(itemId => itemId !== id))
+                toast.success(data.message)
+                fetchWishlist()
+                return
+            }
+            if (data.status == 'notfound') {
+                toast.error(data.message)
+                return
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("Error connecting to the server")
+        }
+    }
     const handleClick = (slug) => {
         navigate(`/perfume/${encodeURIComponent(slug)}`)
     }
 
     useEffect(() => {
+        fetchWishlist()
         showWishlist()
     }, [])
 
@@ -72,17 +106,14 @@ const Wishlist = () => {
 
                             <div
                                 className="w-full h-[240px] flex items-center justify-center overflow-hidden rounded-xl bg-[#fafafa] cursor-pointer"
+                                onClick={() => { handleClick(item.perfume.slug) }}
                             >
                                 <img
-                                    src={`${URL}/${item.perfume.image}`}
+                                    src={item.perfume.image}
                                     alt={item.perfume.name}
                                     className="max-w-[75%] max-h-[75%] object-contain transition-transform duration-300 hover:scale-105"
                                 />
                             </div>
-
-                            <h2 className="mt-5 text-base font-semibold">
-                                {item.perfume.name}
-                            </h2>
 
                             <p className="text-xs text-gray-500 mt-1">
                                 by Whiff
@@ -94,9 +125,9 @@ const Wishlist = () => {
 
                             <button
                                 className="mt-5 w-full rounded-full border border-black py-2 text-sm font-medium hover:bg-black hover:text-white transition-colors duration-200"
-                                onClick={() => handleClick(item.perfume.slug)}
+                                onClick={() => removefromWishlist(item.perfume._id)}
                             >
-                                View Details
+                                Remove
                             </button>
                         </div>
                     ))}

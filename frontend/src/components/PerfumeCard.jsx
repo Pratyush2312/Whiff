@@ -4,7 +4,7 @@ import ProductGallery from "./ProductGallery";
 import WhyChooseWhiff from "./WhyChooseWhiff";
 import Footer from "./Footer";
 import toast from "react-hot-toast";
-const URL=import.meta.env.VITE_BACKEND_URL
+const URL = import.meta.env.VITE_BACKEND_URL
 const PerfumeCard = () => {
     const { slug } = useParams();
 
@@ -128,9 +128,9 @@ const PerfumeCard = () => {
         perfume.back,
     ]
         .filter(Boolean)
-        .map((img) => `${URL}/${img}`);
+        .map((img) => `${img}`);
 
-    const cartItem = cart.find(
+    const cartItem = cart?.find(
         (item) =>
             String(item.perfume._id) === String(perfume._id) &&
             item.volume === volume
@@ -169,7 +169,7 @@ const PerfumeCard = () => {
                     <span className="w-[30vw] bg-gray-200 h-1"></span>
 
                     <p>{perfume.description}</p>
-
+                    <span className="bg-gray-200 rounded-lg p-2 italic font-semibold">"{perfume.byWhiff}"</span>
                     {/* VOLUME */}
                     <div>
                         <p className="mb-2 font-medium">

@@ -1,10 +1,31 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-const URL=import.meta.env.VITE_BACKEND_URL
+
+const URL = import.meta.env.VITE_BACKEND_URL;
+
 const Cart = () => {
   const [cart, setCart] = useState([]);
+  const [hasDiscount, setHasDiscount] = useState(false);
+
   const navigate = useNavigate();
+
+  /* ---------------- PRICE LOGIC ---------------- */
+
+  const priceByVolume = {
+    "10 ML": 199,
+    "30 ML": 299,
+  };
+
+  const getFinalPrice = (item) => {
+    const basePrice = item.combo
+      ? item.price
+      : priceByVolume[item.volume] ?? item.price;
+
+    return hasDiscount
+      ? Math.round(basePrice * 0.9)
+      : basePrice;
+  };
 
   /* ---------------- FETCH CART ---------------- */
 
@@ -26,7 +47,22 @@ const Cart = () => {
     }
   };
 
+  /* ---------------- FETCH PROFILE (DISCOUNT) ---------------- */
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(`${URL}/account/profile`, {
+        credentials: "include",
+      });
+      const user = await res.json();
+      setHasDiscount(user.isFirstLogin === true);
+    } catch {
+      console.log("Profile fetch error");
+    }
+  };
+
   useEffect(() => {
+    fetchProfile();
     fetchCart();
   }, []);
 
@@ -58,6 +94,8 @@ const Cart = () => {
     let message = `Hi Whiff 👋\n\nI want to order:\n\n`;
 
     cart.forEach((item, index) => {
+      const price = getFinalPrice(item);
+
       message += `${index + 1}. `;
 
       if (item.combo) {
@@ -71,7 +109,7 @@ const Cart = () => {
       }
 
       message += `   Quantity: ${item.quantity}\n`;
-      message += `   Price: ₹${item.price}\n\n`;
+      message += `   Price: ₹${price}\n\n`;
     });
 
     message += `Please confirm availability.\n\nThank you 😊`;
@@ -79,7 +117,7 @@ const Cart = () => {
   };
 
   const handleWhatsappCheckout = () => {
-    const phoneNumber = "91XXXXXXXXXX";
+    const phoneNumber = "917980715632";
     const message = buildWhatsappMessage();
     window.open(
       `https://wa.me/${phoneNumber}?text=${message}`,
@@ -117,77 +155,82 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* CART ITEMS */}
         <section className="lg:col-span-2 grid gap-8 grid-cols-1 sm:grid-cols-2">
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-3xl p-5 shadow hover:shadow-lg transition"
-            >
-              {/* IMAGE */}
-              <div className="w-full h-[220px] flex items-center justify-center bg-[#fafafa] rounded-xl mb-4">
-                {item.combo && (
-                  <img
-                    src={`${URL}/${item.combo.image}`}
-                    alt={item.combo.name}
-                    className="max-w-[75%] max-h-[75%] object-contain"
-                  />
-                )}
+          {cart.map((item) => {
+            const finalPrice = getFinalPrice(item);
 
-                {item.perfume && (
-                  <img
-                    src={`${URL}/${item.perfume.image}`}
-                    alt={item.perfume.name}
-                    className="max-w-[75%] max-h-[75%] object-contain cursor-pointer"
-                    onClick={() =>
-                      navigate(
-                        `/perfume/${encodeURIComponent(
-                          item.perfume.slug
-                        )}`
-                      )
-                    }
-                  />
-                )}
-              </div>
-
-              {/* DETAILS */}
-              {item.combo ? (
-                <>
-                  <h2 className="text-lg font-semibold">
-                    {item.combo.name}
-                  </h2>
-
-                  <ul className="text-sm text-gray-600 mt-2">
-                    {item.combo.perfumes.map((p, i) => (
-                      <li key={i}>
-                        • {p.perfume.name} ({p.volume})
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <h2 className="text-lg font-semibold">
-                    {item.perfume.name}
-                  </h2>
-
-                  <p className="text-sm text-gray-500">
-                    Volume: {item.volume}
-                  </p>
-                </>
-              )}
-
-              <p className="mt-3 font-semibold text-lg">
-                ₹{item.price}
-              </p>
-
-              <button
-                onClick={() => removeFromCart(item._id)}
-                className="mt-4 w-full rounded-full border border-red-500
-                text-red-500 py-2 text-sm hover:bg-red-500 hover:text-white transition"
+            return (
+              <div
+                key={item._id}
+                className="bg-white rounded-3xl p-5 shadow hover:shadow-lg transition"
               >
-                Remove
-              </button>
-            </div>
-          ))}
+                {/* IMAGE */}
+                <div className="w-full h-[220px] flex items-center justify-center bg-[#fafafa] rounded-xl mb-4">
+                  {item.combo && (
+                    <img
+                      src={item.combo.image}
+                      alt={item.combo.name}
+                      className="max-w-[75%] max-h-[75%] object-contain"
+                    />
+                  )}
+
+                  {item.perfume && (
+                    <img
+                      src={item.perfume.image}
+                      alt={item.perfume.name}
+                      className="max-w-[75%] max-h-[75%] object-contain cursor-pointer"
+                      onClick={() =>
+                        navigate(
+                          `/perfume/${encodeURIComponent(
+                            item.perfume.slug
+                          )}`
+                        )
+                      }
+                    />
+                  )}
+                </div>
+
+                {/* DETAILS */}
+                {item.combo ? (
+                  <>
+                    <h2 className="text-lg font-semibold">
+                      {item.combo.name}
+                    </h2>
+
+                    <ul className="text-sm text-gray-600 mt-2">
+                      {item.combo.perfumes.map((p, i) => (
+                        <li key={i}>
+                          • {p.perfume.name} ({p.volume})
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-lg font-semibold">
+                      {item.perfume.name}
+                    </h2>
+
+                    <p className="text-sm text-gray-500">
+                      Volume: {item.volume}
+                    </p>
+                  </>
+                )}
+
+                {/* PRICE (DISCOUNTED) */}
+                <p className="mt-3 font-semibold text-lg">
+                  ₹{finalPrice}
+                </p>
+
+                <button
+                  onClick={() => removeFromCart(item._id)}
+                  className="mt-4 w-full rounded-full border border-red-500
+                  text-red-500 py-2 text-sm hover:bg-red-500 hover:text-white transition"
+                >
+                  Remove
+                </button>
+              </div>
+            );
+          })}
         </section>
 
         {/* SUMMARY */}

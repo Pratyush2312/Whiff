@@ -80,7 +80,7 @@ const WishlistSection = () => {
                         {/* Image */}
                         <div className="h-60 bg-gray-100 rounded-lg mb-4 overflow-hidden">
                             <img className="w-full h-full object-cover"
-                                src={`${URL}/${item.perfume.image}`} alt={item.perfume.name} />
+                                src={item.perfume.image} alt={item.perfume.name} />
                         </div>
 
                         {/* Info */}

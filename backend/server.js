@@ -8,17 +8,19 @@ import userRoute from './routes/userRoute.js'
 import wishlistRoute from './routes/wishlistRoute.js'
 import cartRoute from './routes/cartRoute.js'
 import comboRoute from "./routes/comboRoute.js"
+import uploadRoute from "./routes/uploadRoute.js"
+dotenv.config({ path: "../.env" })
 const URL=process.env.FRONTEND_URL
 const MONGO_URL=process.env.MONGO_URL
 const PORT=process.env.PORT||3000
 const app = express()
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 app.use(cors({
     origin:URL,
     credentials:true
 }))
-dotenv.config()
 app.use(cookieParser())
 mongoose.connect(MONGO_URL)
 app.use("/uploads", express.static("uploads"));
@@ -37,6 +39,8 @@ app.use('/cart/add',cartRoute)
 app.use('/cart/remove/:cartId',cartRoute)
 app.use('/cart/update',cartRoute)
 app.use("/combos", comboRoute);
+app.use("/api/upload", uploadRoute)
+
 // app.get('/perfumes',async (req,res)=>{
 //     const perfume=await Perfume.findOne({id:1})
 //     res.send(perfume)
