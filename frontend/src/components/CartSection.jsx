@@ -91,7 +91,7 @@ const CartSection = () => {
   /* ---------------- WHATSAPP ---------------- */
 
   const buildWhatsappMessage = () => {
-    let message = `Hi Whiff 👋\n\nI want to order:\n\n`;
+    let message = `Hi Whiff\n\nI want to order:\n\n`;
 
     cart.forEach((item, index) => {
       const price = getFinalPrice(item);
@@ -112,7 +112,7 @@ const CartSection = () => {
       message += `   Price: ₹${price}\n\n`;
     });
 
-    message += `Please confirm availability.\n\nThank you 😊`;
+    message += `Please confirm availability.\n\nThank you`;
     return encodeURIComponent(message);
   };
 
