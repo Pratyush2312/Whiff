@@ -169,9 +169,9 @@ const Shop = () => {
                     </div>
 
                     {/* CATEGORY */}
-                    <span className="absolute top-3 left-3 text-xs px-2 py-[2px] rounded-full bg-violet-100 text-violet-700 font-medium">
+                    {/* <span className="absolute top-3 left-3 text-xs px-2 py-[2px] rounded-full bg-violet-100 text-violet-700 font-medium">
                       {i.category}
-                    </span>
+                    </span> */}
 
                     {/* WISHLIST */}
                     <button
