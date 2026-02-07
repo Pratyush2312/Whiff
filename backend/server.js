@@ -19,7 +19,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({
     origin: [
         "https://whiffperfume.in",
-        "https://www.whiffperfume.in"
+        "https://www.whiffperfume.in",
+        "http://localhost:5173"
     ],
     credentials: true
 }))
