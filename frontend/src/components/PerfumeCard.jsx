@@ -88,8 +88,12 @@ const PerfumeCard = () => {
 
             const data = await res.json();
             if (data.status === "added") {
-                toast.success("Added to cart");
-                fetchCart();
+                toast.success("Added to cart")
+                fetchCart()
+            }
+            if(data.status=="error"){
+                toast.error('Not authenticated')
+                return
             }
         } catch (err) {
             toast.error("Error adding to cart");
