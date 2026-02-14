@@ -8,49 +8,45 @@ const Hero = () => {
         navigate("/shop ")
     }
     return (
-        <section className="relative w-full h-[60vh] sm:h-[70vh] overflow-hidden">
+        <section className="relative w-full h-[85vh] overflow-hidden">
 
-            {/* BACKGROUND IMAGE */}
+            {/* Background Image */}
             <img
                 src={banner1}
                 alt="Hero Banner"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-right"
             />
 
-           
+            {/* Soft Overlay */}
+            {/* <div className="absolute inset-0 bg-black/25"></div> */}
 
-            {/* CONTENT */}
+            {/* Content */}
             <div className="relative z-10 h-full flex items-center">
-                <div
-                    className="px-6 sm:px-10 md:px-24 max-w-xl text-left"
-                >
+                <div className="max-w-6xl mx-auto px-6 sm:px-12 w-full">
 
-                    <p className="text-xs sm:text-sm tracking-widest uppercase mb-3 sm:mb-4 text-white">
-                        Find your signature scent
-                    </p>
+                    <div className="max-w-lg">
 
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-5 sm:mb-6 text-white">
-                        Luxury <br className="hidden sm:block" /> Perfumes
-                    </h1>
+                        <p className="text-xs tracking-[0.3em] uppercase text-white/80 mb-4">
+                            Find your signature scent
+                        </p>
 
-                    <button
-                        onClick={handleClick}
-                        className="
-          px-6 sm:px-8
-          py-3
-          bg-black
-          text-white
-          text-xs sm:text-sm
-          tracking-widest
-          hover:bg-black/80
-          transition
-        "
-                    >
-                        SHOP NOW
-                    </button>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight text-white mb-6">
+                            Luxury <br /> Perfumes
+                        </h1>
+
+                        <button
+                            onClick={handleClick}
+                            className="px-8 py-3 bg-black text-white rounded-md 
+                     hover:bg-neutral-800 transition duration-300"
+                        >
+                            SHOP NOW
+                        </button>
+
+                    </div>
 
                 </div>
             </div>
+
         </section>
 
     )

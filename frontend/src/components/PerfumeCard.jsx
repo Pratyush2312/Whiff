@@ -34,8 +34,6 @@ const PerfumeCard = () => {
                 { credentials: "include" }
             );
             const user = await res.json();
-
-            // 🔥 discount sirf first login pe
             setHasDiscount(user.isFirstLogin === true);
         } catch (err) {
             console.log("Profile fetch error");
@@ -81,8 +79,9 @@ const PerfumeCard = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    perfumeId: id,
-                    volume,
+                    itemId: id,
+                    itemType: 'Perfume',
+                    volume
                 }),
             });
 
@@ -91,7 +90,7 @@ const PerfumeCard = () => {
                 toast.success("Added to cart")
                 fetchCart()
             }
-            if(data.status=="error"){
+            if (data.status == "error") {
                 toast.error('Not authenticated')
                 return
             }
@@ -136,7 +135,7 @@ const PerfumeCard = () => {
 
     const cartItem = cart?.find(
         (item) =>
-            String(item.perfume._id) === String(perfume._id) &&
+            String(item.item._id) === String(perfume._id) &&
             item.volume === volume
     );
 
@@ -172,13 +171,21 @@ const PerfumeCard = () => {
 
                     <span className="w-[30vw] bg-gray-200 h-1"></span>
 
-                    <p>{perfume.description}</p>
+                    <p className="text-gray-600 leading-relaxed text-base md:text-lg max-w-xl">
+                        {perfume.description}
+                    </p>
                     <span className="bg-gray-200 rounded-lg p-2 italic font-semibold">"{perfume.byWhiff}"</span>
                     {/* VOLUME */}
+                    <div className="mt-6">
+                        <span className="text-sm uppercase tracking-widest text-gray-500">
+                            Volume:
+                        </span>
+
+                        <div className="mt-2 inline-block px-4 py-1 text-sm font-medium">
+                            {volume}
+                        </div>
+                    </div>
                     <div>
-                        <p className="mb-2 font-medium">
-                            Volume: {volume}
-                        </p>
                         <div className="flex gap-4">
                             {["10 ML", "30 ML"].map((size) => (
                                 <button
@@ -214,7 +221,7 @@ const PerfumeCard = () => {
             <WhyChooseWhiff />
             <Footer />
         </div>
-    );
-};
+    )
+}
 
 export default PerfumeCard;

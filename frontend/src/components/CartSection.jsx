@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { div } from "framer-motion/client";
 const URL = import.meta.env.VITE_BACKEND_URL
 const CartSection = () => {
   const [cart, setCart] = useState([]);
@@ -9,20 +10,14 @@ const CartSection = () => {
   const navigate = useNavigate();
 
 
-  const priceByVolume = {
-    "10 ML": 199,
-    "30 ML": 299,
-  };
-
-  const getFinalPrice = (item) => {
-    const basePrice = item.combo
-      ? item.price
-      : priceByVolume[item.volume] ?? item.price;
+  const getFinalPrice = (cartItem) => {
+    const basePrice = cartItem.price;
 
     return hasDiscount
       ? Math.round(basePrice * 0.9)
       : basePrice;
   };
+
   /* ---------------- FETCH CART ---------------- */
 
   const fetchCart = async () => {
@@ -50,8 +45,8 @@ const CartSection = () => {
 
   /* ---------------- NAVIGATE ---------------- */
 
-  const handleClick = (slug) => {
-    navigate(`/perfume/${encodeURIComponent(slug)}`);
+  const handleClick = (item, slug) => {
+    navigate(`/${item}/${encodeURIComponent(slug)}`);
   };
 
   /* ---------------- REMOVE ITEM ---------------- */
@@ -159,49 +154,36 @@ const CartSection = () => {
             >
               {/* IMAGE */}
               <div className="h-60 bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                {item.combo && item.combo.image && (
+                {item.item && item.item.image && (
                   <img
                     className="w-full h-full object-cover"
-                    src={item.combo.image}
-                    alt={item.combo.name}
+                    src={item.item.image}
+                    alt={item.item.name}
                   />
                 )}
 
-                {item.perfume && item.perfume.image && (
+                {/* {item.perfume && item.perfume.image && (
                   <img
                     className="w-full h-full object-cover cursor-pointer"
                     src={item.perfume.image}
                     alt={item.perfume.name}
                     onClick={() => handleClick(item.perfume.slug)}
                   />
-                )}
+                )} */}
               </div>
 
               {/* INFO */}
-              {item.combo ? (
+              {item.item ? (
                 <>
                   <h3 className="font-medium text-gray-800">
-                    {item.combo.name}
+                    {item.item.name}
                   </h3>
-
-                  <ul className="text-sm text-gray-500 mt-1">
-                    {item.combo.perfumes.map((p, i) => (
-                      <li key={i}>
-                        • {p.perfume.name} ({p.volume})
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <h3 className="font-medium text-gray-800">
-                    {item.perfume.name}
-                  </h3>
-
                   <p className="text-sm text-gray-500">
-                    Volume: {item.volume}
+                    Volume: {item.item.volume}
                   </p>
                 </>
+              ) : (
+                null
               )}
 
               {/* PRICE */}
@@ -218,10 +200,10 @@ const CartSection = () => {
                   Remove
                 </button>
 
-                {item.perfume && (
+                {item.item && (
                   <button
                     className="text-sm bg-black text-white px-3 py-1 rounded-md"
-                    onClick={() => handleClick(item.perfume.slug)}
+                    onClick={() => handleClick(item.itemType.toLowerCase(), item.item.slug)}
                   >
                     View
                   </button>

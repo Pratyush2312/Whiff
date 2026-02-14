@@ -1,92 +1,99 @@
-import React from 'react'
-import DarkDesire from "../assets/DarkDesire10ML-front.png"
-import VelvetStrength from "../assets/VelvetStrength10ML-front.png"
-import VanillaVeil from "../assets/VanillaVeil10ML-front.png"
-
-const perfume = [{
+import Combo1 from "../assets/Combo1-10ML.png"
+import Combo2 from "../assets/Combo1-30ML.png"
+import { MdArrowForward } from "react-icons/md";
+import { useNavigate } from "react-router"
+const combo = [{
   id: 1,
-  image: DarkDesire,
-}, 
+  image: Combo1,
+  name: "The Mood Spectrum Trio"
+},
 {
   id: 2,
-  image: VelvetStrength,
-}, 
-{
-  id: 3,
-  image: VanillaVeil,
-}, 
-
-]
+  image: Combo2,
+  name: "The Breeze & Bloom Duo"
+}]
 const SignatureCollection = () => {
+  const navigate = useNavigate()
   return (
-    <div className="px-4 sm:px-8">
+    <div className="px-6 sm:px-10 lg:px-16 py-20 bg-neutral-50">
 
-      <h2 className="text-2xl sm:text-3xl font-bold mb-10 text-center mt-10 font-body">
-        Crafted for you
-      </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-14">
+        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-center sm:text-left">
+          Crafted for you
+        </h2>
 
+        <button
+          onClick={() => navigate('/combos')}
+          className="
+          justify-center
+        mt-6 sm:mt-0
+        flex items-center gap-2
+        px-6 py-2
+        rounded-full
+        border border-black
+        text-sm font-medium
+        hover:bg-black hover:text-white
+        transition duration-300
+      "
+        >
+          More Combos <MdArrowForward />
+        </button>
+      </div>
+
+      {/* Grid */}
       <section
         className="
       grid
       grid-cols-1
       sm:grid-cols-2
-      lg:grid-cols-3
-      gap-y-20
-      gap-x-12
-      py-16
+      gap-y-16
+      gap-x-10
       place-items-center
     "
       >
-        {perfume.map((item) => (
+        {combo.map((item) => (
           <div
             key={item.id}
-            className="group relative flex justify-center w-full h-[360px]"
+            className="group relative w-full max-w-xs"
           >
-
-            {/* CIRCLE */}
+            {/* Card */}
             <div
               className="
-            absolute
-            inset-0
-            mx-auto
-            w-[220px]
-            h-[320px]
-            sm:w-[240px]
-            sm:h-[340px]
-            md:w-[260px]
-            md:h-[360px]
-            rounded-full
-            bg-[#F2E6D8]
+            relative
+            h-[340px]
+            rounded-2xl
+            bg-white
+            shadow-sm
             flex
             items-center
             justify-center
             transition-all
             duration-500
-            group-hover:scale-105
-            group-hover:bg-[#EFE1CF]
+            group-hover:shadow-xl
+            group-hover:-translate-y-2
           "
             >
               <img
                 src={item.image}
                 alt={item.name}
                 className="
-              h-[220px]
-              sm:h-[240px]
-              md:h-[260px]
+              h-56
               object-contain
-              z-10
               transition-transform
               duration-500
-              group-hover:scale-105
+              group-hover:scale-110
             "
               />
             </div>
-
+            <div className="mt-5 text-center">
+              <h3 className="text-base font-medium">
+                {item.name}
+              </h3>
+            </div>
           </div>
         ))}
       </section>
     </div>
-
   )
 }
 

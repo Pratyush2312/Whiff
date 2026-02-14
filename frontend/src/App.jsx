@@ -1,36 +1,53 @@
-import Home from "./pages/Home"
-import Shop from "./pages/Shop"
-import Auth from "./pages/Auth"
-import PerfumeCard from "./components/PerfumeCard"
-import Wishlist from "./pages/Wishlist"
-import Account from "./pages/Account"
-import Cart from "./pages/Cart"
-import Combos from "./pages/Combo"
-import { Route, Routes } from "react-router"
-import { Toaster } from "react-hot-toast"
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import Auth from "./pages/Auth";
+import PerfumeCard from "./components/PerfumeCard";
+import Wishlist from "./pages/Wishlist";
+import Account from "./pages/Account";
+import Cart from "./pages/Cart";
+import Combo from "./pages/Combo";
+import ComboCard from "./components/ComboCard";
+import { Route, Routes, useLocation } from "react-router";
+import { Toaster } from "react-hot-toast";
+import { AnimatePresence, motion } from "framer-motion";
+
 function App() {
+  const location = useLocation();
 
   return (
     <>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/account" element={<Account/>} />
-        <Route path="/account/auth" element={<Auth />} />
-        {/* <Route path="/accounts/login" element={<Login />} /> */}
-        <Route path="/combos" element={<Combos />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path='/perfume/:slug' element={<PerfumeCard />} />
+      <Toaster position="top-center" reverseOrder={false} />
 
-      </Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
 
+          <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/account" element={<PageWrapper><Account /></PageWrapper>} />
+          <Route path="/account/auth" element={<PageWrapper><Auth /></PageWrapper>} />
+          <Route path="/combos" element={<PageWrapper><Combo /></PageWrapper>} />
+          <Route path="/combo/:slug" element={<PageWrapper><ComboCard /></PageWrapper>} />
+          <Route path="/wishlist" element={<PageWrapper><Wishlist /></PageWrapper>} />
+          <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
+          <Route path="/shop" element={<PageWrapper><Shop /></PageWrapper>} />
+          <Route path="/perfume/:slug" element={<PageWrapper><PerfumeCard /></PageWrapper>} />
+
+        </Routes>
+      </AnimatePresence>
     </>
-  )
+  );
 }
+const PageWrapper = ({ children }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
-export default App
+
+export default App;

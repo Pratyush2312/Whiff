@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from 'react-router';
-import PerfumeCard from '../components/PerfumeCard';
+import PerfumeCard from '../components/PerfumeCard'
 import toast from 'react-hot-toast';
 const URL = import.meta.env.VITE_BACKEND_URL
 const Shop = () => {

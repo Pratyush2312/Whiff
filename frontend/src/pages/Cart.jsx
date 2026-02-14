@@ -12,15 +12,8 @@ const Cart = () => {
 
   /* ---------------- PRICE LOGIC ---------------- */
 
-  const priceByVolume = {
-    "10 ML": 199,
-    "30 ML": 299,
-  };
-
-  const getFinalPrice = (item) => {
-    const basePrice = item.combo
-      ? item.price
-      : priceByVolume[item.volume] ?? item.price;
+  const getFinalPrice = (cartItem) => {
+    const basePrice = cartItem.price;
 
     return hasDiscount
       ? Math.round(basePrice * 0.9)
@@ -86,6 +79,10 @@ const Cart = () => {
     } catch {
       toast.error("Error removing item");
     }
+  };
+
+  const handleClick = (item, slug) => {
+    navigate(`/${item}/${encodeURIComponent(slug)}`);
   };
 
   /* ---------------- WHATSAPP ---------------- */
@@ -155,7 +152,7 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* CART ITEMS */}
         <section className="lg:col-span-2 grid gap-8 grid-cols-1 sm:grid-cols-2">
-          {cart.map((item) => {
+          {cart?.map((item) => {
             const finalPrice = getFinalPrice(item);
 
             return (
@@ -173,17 +170,13 @@ const Cart = () => {
                     />
                   )}
 
-                  {item.perfume && (
+                  {item.item && (
                     <img
-                      src={item.perfume.image}
-                      alt={item.perfume.name}
+                      src={item.item.image}
+                      alt={item.item.name}
                       className="max-w-[75%] max-h-[75%] object-contain cursor-pointer"
                       onClick={() =>
-                        navigate(
-                          `/perfume/${encodeURIComponent(
-                            item.perfume.slug
-                          )}`
-                        )
+                        handleClick(item.itemType.toLowerCase(), item.item.slug)
                       }
                     />
                   )}
@@ -197,7 +190,7 @@ const Cart = () => {
                     </h2>
 
                     <ul className="text-sm text-gray-600 mt-2">
-                      {item.combo.perfumes.map((p, i) => (
+                      {item.combo.perfume?.map((p, i) => (
                         <li key={i}>
                           • {p.perfume.name} ({p.volume})
                         </li>
@@ -207,7 +200,7 @@ const Cart = () => {
                 ) : (
                   <>
                     <h2 className="text-lg font-semibold">
-                      {item.perfume.name}
+                      {item.item.name}
                     </h2>
 
                     <p className="text-sm text-gray-500">
