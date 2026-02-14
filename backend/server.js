@@ -42,6 +42,7 @@ app.use('/cart/add', cartRoute)
 app.use('/cart/remove/:cartId', cartRoute)
 app.use('/cart/update', cartRoute)
 app.use("/combos", comboRoute);
+app.use("/combos/:slug", comboRoute);
 app.use("/api/upload", uploadRoute)
 
 // app.get('/perfumes',async (req,res)=>{

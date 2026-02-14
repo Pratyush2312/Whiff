@@ -121,7 +121,6 @@ export const postUserlogin = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     const user = await User.findById(req.user).select("-password")
-    console.log(user)
     res.json(user)
 }
 

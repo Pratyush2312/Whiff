@@ -5,7 +5,7 @@ import { Combo } from "../models/combo.js";
 export const addToCart = async (req, res) => {
     try {
         const userId = req.user;
-        let { perfumeId, volume } = req.body;
+        const { itemId, itemType } = req.body;
 
         if (!userId) {
             return res.status(401).json({
@@ -14,53 +14,28 @@ export const addToCart = async (req, res) => {
             });
         }
 
-        if (!volume) {
-            volume = "10 ML";
-        }
+        const product =
+            itemType === "Perfume"
+                ? await Perfume.findById(itemId)
+                : await Combo.findById(itemId);
 
-        const priceByVolume = {
-            "10 ML": 199,
-            "30 ML": 299,
-        };
-
-        const basePrice = priceByVolume[volume];
-
-        if (!basePrice) {
-            return res.status(400).json({
+        if (!product) {
+            return res.status(404).json({
                 status: "error",
-                message: "Invalid volume selected",
+                message: "Product not found",
             });
         }
-
-        const existing = await Cart.findOne({
-            user: userId,
-            perfume: perfumeId,
-            volume: volume,
-        });
-
-        if (existing) {
-            existing.quantity += 1;
-            await existing.save();
-
-            return res.json({
-                status: "updated",
-                message: "Quantity increased",
-            });
-        }
-
         await Cart.create({
             user: userId,
-            perfume: perfumeId,
-            volume: volume,
-            price: basePrice, // 🔥 ONLY BASE PRICE
-            quantity: 1,
+            item: itemId,
+            itemType,
+            volume: product.volume,
+            price: product.price,
         });
-
         return res.status(201).json({
             status: "added",
             message: "Added to cart",
         });
-
     } catch (err) {
         console.error("ADD TO CART ERROR:", err);
         return res.status(500).json({
@@ -70,6 +45,7 @@ export const addToCart = async (req, res) => {
     }
 };
 
+
 /* ================= GET CART ================= */
 
 export const getCart = async (req, res) => {
@@ -77,20 +53,15 @@ export const getCart = async (req, res) => {
         const userId = req.user;
 
         const cartItems = await Cart.find({ user: userId })
-            .populate("perfume")
-            .populate({
-                path: "combo",
-                populate: {
-                    path: "perfumes.perfume"
-                }
-            });
-
+            .populate("item")
+        // console.log(cartItems)
         return res.json({
             status: "success",
             cart: cartItems
         });
 
     } catch (err) {
+        // console.log(err)
         return res.status(500).json({
             status: "error",
             message: "Server error"
@@ -172,41 +143,4 @@ export const updateCart = async (req, res) => {
 };
 
 
-export const addComboToCart = async (req, res) => {
-    try {
-        const userId = req.user;
-        const { comboId } = req.body;
 
-        if (!userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        const combo = await Combo.findById(comboId);
-        if (!combo) {
-            return res.status(404).json({ message: "Combo not found" });
-        }
-
-        const existing = await Cart.findOne({
-            user: userId,
-            combo: comboId,
-        });
-
-        if (existing) {
-            existing.quantity += 1;
-            await existing.save();
-            return res.json({ status: "updated" });
-        }
-
-        await Cart.create({
-            user: userId,
-            combo: comboId,
-            price: combo.price,
-            quantity: 1,
-        });
-
-        return res.status(201).json({ status: "added" });
-    } catch (err) {
-        console.error("ADD COMBO ERROR:", err.message);
-        return res.status(500).json({ message: "Server error" });
-    }
-};

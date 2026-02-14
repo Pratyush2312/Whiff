@@ -7,28 +7,34 @@ const ComboSchema = new mongoose.Schema(
       required: true,
     },
 
-    perfumes: [
-      {
-        perfume: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Perfume",
-          required: true,
-        },
-        volume: {
-          type: String, // "10 ML" or "30 ML"
-          required: true,
-        },
-      },
-    ],
+    desc: {
+      type: String,
+      required: true
+    },
+
+    perfume: {
+      type: [String],
+      // required:true
+    },
+
+    volume: {
+      type: String,
+      required: true
+    },
 
     price: {
-      type: Number, // 399 / 599
+      type: Number,
       required: true,
     },
 
     image: {
       type: String,
     },
+    
+    slug: {
+      type: String,
+      required: true
+    }
   },
   { timestamps: true }
 );

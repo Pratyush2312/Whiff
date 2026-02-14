@@ -9,19 +9,17 @@ const CartSchema = new Schema(
             required: true,
         },
 
-        // 🔹 perfume item
-        perfume: {
+        item: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Perfume",
-            default: null,
+            required: true,
+            refPath: "itemType"
+        },
+        itemType: {
+            type: String,
+            required: true,
+            enum: ["Perfume", "Combo"]
         },
 
-        // 🔹 combo item
-        combo: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Combo",
-            default: null,
-        },
 
         quantity: {
             type: Number,
@@ -43,11 +41,8 @@ const CartSchema = new Schema(
 );
 
 
-CartSchema.pre("validate", function () {
-    if (!this.perfume && !this.combo) {
-        throw new Error("Either perfume or combo is required");
-    }
-});
+          
+
 
 
 export const Cart = mongoose.model("Cart", CartSchema);
