@@ -88,10 +88,6 @@ const WishlistSection = () => {
                             {item.perfume.name}
                         </h3>
 
-                        <p className="text-sm text-gray-500">
-                            {item.perfume.category}
-                        </p>
-
                         {/* Actions */}
                         <div className="flex justify-between items-center mt-4">
                             <button className="text-sm text-red-500 hover:underline" onClick={()=>{removefromWishlist(item.perfume._id)}}>
