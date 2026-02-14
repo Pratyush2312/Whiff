@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-
+const URL = import.meta.env.VITE_BACKEND_URL
 const Combo = () => {
   const [combos, setCombos] = useState([]);
   const navigate=useNavigate()
@@ -10,7 +10,7 @@ const Combo = () => {
 
   // 🔹 fetch combos
   useEffect(() => {
-    fetch("http://localhost:3000/combos")
+    fetch(`${URL}/combos`)
       .then(res => res.json())
       .then(setCombos)
       .catch((err) =>{
