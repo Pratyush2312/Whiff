@@ -17,7 +17,7 @@ const tabs = [
 const URL=import.meta.env.VITE_BACKEND_URL
 const Account = () => {
     const [user, setUser] = useState(null)
-    const [activeTab, setActiveTab] = useState('profile')
+    const [activeTab, setActiveTab] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
