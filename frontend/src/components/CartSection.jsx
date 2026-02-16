@@ -91,25 +91,17 @@ const CartSection = () => {
     cart.forEach((item, index) => {
       const price = getFinalPrice(item);
 
-      message += `${index + 1}. `;
-
-      if (item.combo) {
-        message += `${item.combo.name}\n`;
-        item.combo.perfumes.forEach((p) => {
-          message += `   • ${p.perfume.name} (${p.volume})\n`;
-        });
-      } else if (item.perfume) {
-        message += `${item.perfume.name}\n`;
-        message += `   Volume: ${item.volume}\n`;
-      }
-
+      message += `${index + 1}. ${item.item?.name}\n`;
+      message += `   Volume: ${item.volume}\n`;
       message += `   Quantity: ${item.quantity}\n`;
       message += `   Price: ₹${price}\n\n`;
     });
 
     message += `Please confirm availability.\n\nThank you`;
+
     return encodeURIComponent(message);
   };
+
 
   const handleWhatsappCheckout = () => {
     const phoneNumber = "917980715632";
