@@ -7,6 +7,10 @@ import Account from "./pages/Account";
 import Cart from "./pages/Cart";
 import Combo from "./pages/Combo";
 import ComboCard from "./components/ComboCard";
+import Privacy from "./pages/Privacy"
+import Terms from "./pages/Terms"
+import RefundPolicy from "./pages/RefundPolicy"
+import Contact from "./pages/Contact"
 import { Route, Routes, useLocation } from "react-router";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
@@ -30,7 +34,10 @@ function App() {
           <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
           <Route path="/shop" element={<PageWrapper><Shop /></PageWrapper>} />
           <Route path="/perfume/:slug" element={<PageWrapper><PerfumeCard /></PageWrapper>} />
-
+          <Route path="/privacy-policy" element={<Privacy />} />  
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </AnimatePresence>
     </>

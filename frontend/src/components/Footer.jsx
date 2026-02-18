@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router";
-import { FaInstagram } from "react-icons/fa";
-import { FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
+
 const Footer = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate();
+
     return (
         <footer className="bg-black text-gray-300 px-6 sm:px-12 lg:px-20 pt-16 pb-8">
 
@@ -23,7 +24,10 @@ const Footer = () => {
                         SHOP
                     </h3>
                     <ul className="space-y-2 text-sm">
-                        <li className="hover:text-white cursor-pointer" onClick={()=>{navigate('/shop')}}>
+                        <li
+                            className="hover:text-white cursor-pointer"
+                            onClick={() => navigate('/shop')}
+                        >
                             Perfumes
                         </li>
                     </ul>
@@ -34,94 +38,92 @@ const Footer = () => {
                     <h3 className="text-white text-sm font-semibold tracking-wider mb-4">
                         FOLLOW
                     </h3>
-                    <div className="flex gap-4">
-                        <span className="cursor-pointer hover:text-white">
-                            <a href="https://www.instagram.com/whiffperfumeco?igsh=MTFicmxpN3R3YmRhNQ%3D%3D&utm_source=qr" target='_blank'><FaInstagram/></a>
-                        </span>
-                        <span className="cursor-pointer hover:text-white">
-                            <a href="https://www.facebook.com/share/17idBkpH2e/?mibextid=wwXIfr" target='_blank'><FaFacebook/></a>
-                        </span>
+                    <div className="flex gap-4 text-lg">
+                        <a
+                            href="https://www.instagram.com/whiffperfumeco"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white"
+                        >
+                            <FaInstagram />
+                        </a>
+
+                        <a
+                            href="https://www.facebook.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white"
+                        >
+                            <FaFacebook />
+                        </a>
                     </div>
                 </div>
+
+                {/* CONTACT */}
+                <div>
+                    <h3 className="text-white text-sm font-semibold tracking-wider mb-4">
+                        CONTACT
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                        Email:{" "}
+                        <a
+                            href="mailto:whiffperfumeco@gmail.com"
+                            className="hover:text-gray-400 underline"
+                        >
+                            whiffperfumeco@gmail.com
+                        </a>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                        Phone: +91 79807 15632
+                    </p>
+                    <p className="text-sm text-gray-400">
+                        Location: Kolkata, India
+                    </p>
+                </div>
+
             </div>
 
             {/* DIVIDER */}
             <div className="border-t border-gray-800 my-10" />
 
-            {/* POLICIES */}
-            <div className="max-w-4xl mx-auto text-sm text-gray-400 space-y-6 leading-relaxed">
+            {/* QUICK LINKS */}
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                <span
+                    onClick={() => navigate('/privacy-policy')}
+                    className="hover:text-white cursor-pointer"
+                >
+                    Privacy Policy
+                </span>
 
-                <p>
-                    Due to the nature of perfumes and personal care products, returns are
-                    not accepted once the product has been opened or used.
-                </p>
+                <span
+                    onClick={() => navigate('/terms')}
+                    className="hover:text-white cursor-pointer"
+                >
+                    Terms & Conditions
+                </span>
 
-                <p>
-                    However, we do offer replacements in case of:
-                    <br />• Damaged products during transit
-                    <br />• Incorrect items received
-                </p>
+                <span
+                    onClick={() => navigate('/refund-policy')}
+                    className="hover:text-white cursor-pointer"
+                >
+                    Refund Policy
+                </span>
 
-                <p>
-                    To request a replacement, please contact us within 24 hours of delivery
-                    with clear photos or videos of the issue.
-                </p>
-
-                <p>
-                    Orders are delivered within <span className="text-white">7–8 business days</span>.
-                    Please note that Saturdays and Sundays are not counted as business days.
-                </p>
-
-            </div>
-
-            {/* FAQs */}
-            <div className="max-w-4xl mx-auto mt-12 text-sm text-gray-400 space-y-4">
-
-                <h4 className="text-white font-semibold text-base mb-4">
-                    FAQs
-                </h4>
-
-                <p><span className="text-white">1. How long does shipping take?</span><br />
-                    Orders are usually delivered within 7–8 business days.
-                </p>
-
-                <p><span className="text-white">2. Do you accept returns?</span><br />
-                    Returns are not accepted once the product is opened or used.
-                    Replacements are provided for damaged or incorrect items.
-                </p>
-
-                <p><span className="text-white">3. What should I do if I receive a damaged product?</span><br />
-                    Contact us within 24 hours with clear photos or videos.
-                </p>
-
-                <p><span className="text-white">4. Are your perfumes long-lasting?</span><br />
-                    Yes, our perfumes are crafted for excellent longevity, especially for Indian weather.
-                </p>
-
-                <p><span className="text-white">5. Are Whiff perfumes inspired by luxury fragrances?</span><br />
-                    Yes, inspired by luxury scents while maintaining a unique identity.
-                </p>
-
-                <p><span className="text-white">6. Can I cancel my order after placing it?</span><br />
-                    Orders can be cancelled only before shipping.
-                </p>
-
-                <p><span className="text-white">7. Do you offer Cash on Delivery (COD)?</span><br />
-                    COD availability depends on your location.
-                </p>
-
-                <p><span className="text-white">8. How can I contact customer support?</span><br />
-                    Reach out through our support channels for any queries.
-                </p>
-
+                <span
+                    onClick={() => navigate('/contact')}
+                    className="hover:text-white cursor-pointer"
+                >
+                    Contact Us
+                </span>
             </div>
 
             {/* BOTTOM */}
-            <div className="text-center text-xs text-gray-500 mt-16">
+            <div className="text-center text-xs text-gray-500 mt-10">
                 © 2026 Whiff. All rights reserved.
             </div>
-        </footer>
-    )
-}
 
-export default Footer
+        </footer>
+    );
+};
+
+export default Footer;

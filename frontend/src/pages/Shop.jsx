@@ -35,12 +35,7 @@ const Shop = () => {
   }
 
 
-  // const togglewishList = (id) => {
-  //   setwishList((prev) =>
-  //     prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
-  //   )
-  //   console.log(wishList)
-  // }
+
   const addToWishlist = async (id) => {
     try {
       const response = await fetch(`${URL}/wishlist/add`, {
@@ -132,7 +127,7 @@ const Shop = () => {
             Our Collection
           </h1>
           <p className="text-gray-600 mt-2">
-            Six signature fragrances crafted by Whiff
+            Signature fragrances crafted by Whiff
           </p>
         </div>
 
@@ -171,7 +166,7 @@ const Shop = () => {
                     {/* CATEGORY */}
                     {/* <span className="absolute top-3 left-3 text-xs px-2 py-[2px] rounded-full bg-violet-100 text-violet-700 font-medium">
                       {i.category}
-                    </span> */}
+                    </span> */}  
 
                     {/* WISHLIST */}
                     <button
