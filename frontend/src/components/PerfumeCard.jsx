@@ -88,7 +88,7 @@ const PerfumeCard = () => {
             const data = await res.json();
             if (data.status === "added") {
                 toast.success("Added to cart")
-                fetchCart()
+                await fetchCart()
             }
             if (data.status == "error") {
                 toast.error('Not authenticated')
@@ -109,7 +109,7 @@ const PerfumeCard = () => {
                 }
             );
             toast.success("Removed from cart");
-            fetchCart();
+            await fetchCart();
         } catch (err) {
             toast.error("Error removing item");
         }
@@ -134,10 +134,10 @@ const PerfumeCard = () => {
         .map((img) => `${img}`);
 
     const cartItem = cart?.find(
-        (item) =>
-            String(item.item._id) === String(perfume._id) &&
-            item.volume === volume
-    );
+        (c) =>
+            c.itemType === "Perfume" &&
+            String(c.item?._id || c.item) === String(perfume._id)
+    )
 
     /* ---------------- UI ---------------- */
 

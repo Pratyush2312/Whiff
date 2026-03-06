@@ -237,6 +237,12 @@ const Cart = () => {
           >
             Inquire on WhatsApp
           </button>
+          {/* <button onClick={() => {
+            console.log(cart._id)
+            navigate('/checkout', {
+              state: { cartId: cart[0]._id }
+            })
+          }}>Checkout</button> */}
 
           <p className="text-xs text-gray-500 text-center mt-3">
             You’ll be redirected to WhatsApp
