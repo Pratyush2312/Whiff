@@ -76,7 +76,7 @@ export const postUserlogin = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({
+            return res.status(404).json({
                 status: "invalid",
                 message: "Please Sign in"
             });

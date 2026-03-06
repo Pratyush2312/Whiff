@@ -1,11 +1,12 @@
 import { Cart } from "../models/cart.js";
 import { Combo } from "../models/combo.js";
+import { Perfume } from "../models/perfume.js"
 /* ================= ADD TO CART ================= */
 
 export const addToCart = async (req, res) => {
     try {
         const userId = req.user;
-        const { itemId, itemType } = req.body;
+        const { itemId, itemType, volume } = req.body;
 
         if (!userId) {
             return res.status(401).json({
@@ -29,7 +30,7 @@ export const addToCart = async (req, res) => {
             user: userId,
             item: itemId,
             itemType,
-            volume: product.volume,
+            volume: volume,
             price: product.price,
         });
         return res.status(201).json({
