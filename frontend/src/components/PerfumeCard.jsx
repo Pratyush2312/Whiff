@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router";
 import ProductGallery from "./ProductGallery";
 import WhyChooseWhiff from "./WhyChooseWhiff";
@@ -123,8 +123,19 @@ const PerfumeCard = () => {
         fetchCart();
     }, [slug]);
 
-    if (!perfume) return <p>Loading...</p>;
 
+    
+    const cartItem = useMemo(() => {
+        return cart?.find((c) => {
+            const itemId = c.item?._id || c.item
+            return (
+                c.itemType === "Perfume" &&
+                String(itemId) === String(perfume?._id) &&
+                String(c.volume).trim() === String(volume).trim()
+            )
+        })
+    }, [cart, volume, perfume])
+    if (!perfume) return <p>Loading...</p>;
     const images = [
         perfume.image,
         perfume.front,
@@ -132,12 +143,6 @@ const PerfumeCard = () => {
     ]
         .filter(Boolean)
         .map((img) => `${img}`);
-
-    const cartItem = cart?.find(
-        (c) =>
-            c.itemType === "Perfume" &&
-            String(c.item?._id || c.item) === String(perfume._id)
-    )
 
     /* ---------------- UI ---------------- */
 
