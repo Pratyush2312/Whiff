@@ -16,9 +16,12 @@ const Checkout = () => {
             setLoading(true);
 
             // 1️⃣ Create Order (secure)
-            const res = await fetch(`${URL}/create-order`, {
+            const res = await fetch(`${URL}/order/create-order`, {
                 method: "POST",
-                credentials:"include",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({ cartId }),
             });
 
@@ -32,7 +35,7 @@ const Checkout = () => {
 
             // 2️⃣ Razorpay options
             const options = {
-                key: "rzp_test_SLusQgLO3Ovu0C", // 🔥 replace with your test key
+                key: "rzp_test_SLusQgLO3Ovu0C",     
                 amount: order.amount,
                 currency: order.currency,
                 name: "WHIFF",
@@ -42,11 +45,12 @@ const Checkout = () => {
                 handler: async function (response) {
                     try {
                         // 3️⃣ Verify Payment
-                        const verifyRes = await fetch(`${URL}/verify-payment`, {
+                        const verifyRes = await fetch(`${URL}/order/verify-payment`, {
                             method: "POST",
+                            credentials:'include',
                             headers: {
                                 "Content-Type": "application/json",
-                                Authorization: `Bearer ${token}`,
+                                // Authorization: `Bearer ${token}`,
                             },
                             body: JSON.stringify({
                                 razorpay_order_id: response.razorpay_order_id,
@@ -56,11 +60,12 @@ const Checkout = () => {
                         });
 
                         const data = await verifyRes.json();
-
+                        
                         if (data.success) {
+                            toast.success(data.message);
                             navigate(`/order-success/${data.orderId}`);
                         } else {
-                            alert("Payment verification failed");
+                            toast.error("Payment verification failed");
                         }
                     } catch (err) {
                         console.error(err);

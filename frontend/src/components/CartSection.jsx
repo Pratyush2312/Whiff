@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { div } from "framer-motion/client";
 const URL = import.meta.env.VITE_BACKEND_URL
 const CartSection = () => {
   const [cart, setCart] = useState([]);
@@ -83,35 +82,6 @@ const CartSection = () => {
     }
   };
 
-  /* ---------------- WHATSAPP ---------------- */
-
-  const buildWhatsappMessage = () => {
-    let message = `Hi Whiff\n\nI want to order:\n\n`;
-
-    cart.forEach((item, index) => {
-      const price = getFinalPrice(item);
-
-      message += `${index + 1}. ${item.item?.name}\n`;
-      message += `   Volume: ${item.volume}\n`;
-      message += `   Quantity: ${item.quantity}\n`;
-      message += `   Price: ₹${price}\n\n`;
-    });
-
-    message += `Please confirm availability.\n\nThank you`;
-
-    return encodeURIComponent(message);
-  };
-
-
-  const handleWhatsappCheckout = () => {
-    const phoneNumber = "917980715632";
-    const message = buildWhatsappMessage();
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${message}`,
-      "_blank"
-    );
-  };
-
   /* ---------------- EMPTY STATE ---------------- */
 
   if (cart.length === 0) {
@@ -124,7 +94,6 @@ const CartSection = () => {
     );
   }
 
-  /* ---------------- UI ---------------- */
 
   /* ---------------- UI ---------------- */
 
@@ -220,12 +189,13 @@ const CartSection = () => {
         <div className="h-px bg-gray-300 my-4" />
 
         <button
-          onClick={handleWhatsappCheckout}
           className="w-full bg-green-500 hover:bg-green-600
-                   text-white font-semibold py-3 rounded-full transition"
-        >
-          Inquire on WhatsApp
-        </button>
+            text-white font-semibold py-3 rounded-full transition"
+          onClick={() => {
+            navigate('/checkout', {
+              state: { cartId: cart[0]._id }
+            })
+          }}>Checkout</button>
 
         <p className="text-xs text-gray-500 text-center mt-3">
           You’ll be redirected to WhatsApp

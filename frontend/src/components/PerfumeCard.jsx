@@ -9,15 +9,15 @@ const PerfumeCard = () => {
     const { slug } = useParams();
 
     const [perfume, setPerfume] = useState(null);
-    const [volume, setVolume] = useState("10 ML");
+    const [volume, setVolume] = useState("10ml");
     const [cart, setCart] = useState([]);
     const [hasDiscount, setHasDiscount] = useState(false);
 
     /* ---------------- PRICE MAP ---------------- */
 
     const priceByVolume = {
-        "10 ML": 199,
-        "30 ML": 299,
+        "10ml": 199,
+        "30ml": 299,
     };
 
     const basePrice = priceByVolume[volume];
@@ -192,7 +192,7 @@ const PerfumeCard = () => {
                     </div>
                     <div>
                         <div className="flex gap-4">
-                            {["10 ML", "30 ML"].map((size) => (
+                            {["10ml", "30ml"].map((size) => (
                                 <button
                                     key={size}
                                     onClick={() => setVolume(size)}

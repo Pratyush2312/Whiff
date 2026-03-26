@@ -6,15 +6,17 @@ import Profile from '../components/Profile'
 import Settings from '../components/Settings'
 import WishlistSection from '../components/WishlistSection'
 import CartSection from '../components/CartSection'
+import OrderSection from '../components/OrderSection'
 
 
 const tabs = [
     { id: "profile", label: "Profile" },
     { id: "wishlist", label: "Wishlist" },
     { id: "cart", label: "Cart" },
+    { id: "order", label: "Order" },
     { id: "settings", label: "Settings" }
 ]
-const URL=import.meta.env.VITE_BACKEND_URL
+const URL = import.meta.env.VITE_BACKEND_URL
 const Account = () => {
     const [user, setUser] = useState(null)
     const [activeTab, setActiveTab] = useState('profile')
@@ -89,8 +91,8 @@ const Account = () => {
 
                             <span
                                 className={`relative z-10 transition-colors ${activeTab === tab.id
-                                        ? "text-white"
-                                        : "text-gray-700"
+                                    ? "text-white"
+                                    : "text-gray-700"
                                     }`}
                             >
                                 {tab.label}
@@ -112,6 +114,7 @@ const Account = () => {
                             {activeTab === "profile" && <Profile user={user} />}
                             {activeTab === "wishlist" && <WishlistSection />}
                             {activeTab === "cart" && <CartSection />}
+                            {activeTab === "order" && <OrderSection />}
                             {activeTab === "settings" && <Settings />}
                         </motion.div>
                     </AnimatePresence>
