@@ -10,6 +10,7 @@ import cartRoute from './routes/cartRoute.js'
 import comboRoute from "./routes/comboRoute.js"
 import uploadRoute from "./routes/uploadRoute.js"
 import paymentRoute from "./routes/paymentRoute.js"
+import orderRoute from "./routes/orderRoute.js"
 dotenv.config({ path: "../.env" })
 const URL = process.env.FRONTEND_URL
 const MONGO_URL = process.env.MONGO_URL
@@ -44,7 +45,12 @@ app.use('/cart/remove/:cartId', cartRoute)
 app.use('/cart/update', cartRoute)
 app.use("/combos", comboRoute);
 app.use("/combos/:slug", comboRoute);
-app.use('/create-order',paymentRoute)
+app.use('/order',paymentRoute)
+app.use('/order/create-order', paymentRoute)
+app.use('order/verify-payment', paymentRoute)
+app.use('/api', orderRoute);
+app.use('/api/orders', orderRoute);
+app.use('/api/order/:orderId', orderRoute);
 // app.use("/api/upload", uploadRoute)
 
 // app.get('/perfumes',async (req,res)=>{

@@ -1,8 +1,8 @@
 import express from 'express'
-import { createOrder } from '../controller/paymentController.js'
+import { createOrder, verifypayment } from '../controller/paymentController.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 const router = express.Router()
 
-router.post('/', authMiddleware, createOrder)
-
+router.post('/create-order', authMiddleware, createOrder)
+router.post('/verify-payment',authMiddleware,verifypayment)
 export default router

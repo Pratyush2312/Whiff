@@ -5,7 +5,17 @@ const PerfumeSchema = new Schema({
     id: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     brand: { type: String, required: true },
-    price: { type: Number, required: true },
+    prices: {
+        type: Map,
+        of: Number,
+        required: true
+    },
+
+    // default selected volume
+    defaultVolume: {
+        type: String,
+        default: "10ml"
+    },
     description: { type: String },
     image: { type: String },
     front: { type: String },
@@ -28,6 +38,6 @@ const PerfumeSchema = new Schema({
     TenMLfront: { type: String },
     TenMLback: { type: String },
     isActive: { type: Boolean, default: true }
-}, {timestamps:true})
+}, { timestamps: true })
 
 export const Perfume = mongoose.model("Perfume", PerfumeSchema)

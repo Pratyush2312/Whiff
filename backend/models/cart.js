@@ -8,7 +8,10 @@ const CartSchema = new Schema(
             ref: "User",
             required: true,
         },
-
+        name: {
+            type: String,
+            required: true
+        },  
         item: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
@@ -26,9 +29,9 @@ const CartSchema = new Schema(
             default: 1,
         },
 
-        volume: {
+        volume: {   
             type: String,
-            enum: ["10 ML", "30 ML"],
+            enum: ["10ml", "30ml"],
             default: null,
         },
 

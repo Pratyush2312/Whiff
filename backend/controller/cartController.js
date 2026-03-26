@@ -7,7 +7,6 @@ export const addToCart = async (req, res) => {
     try {
         const userId = req.user;
         const { itemId, itemType, volume } = req.body;
-
         if (!userId) {
             return res.status(401).json({
                 status: "error",
@@ -20,18 +19,33 @@ export const addToCart = async (req, res) => {
                 ? await Perfume.findById(itemId)
                 : await Combo.findById(itemId);
 
+
         if (!product) {
             return res.status(404).json({
                 status: "error",
                 message: "Product not found",
             });
         }
+        let price, selectedVolume;
+        if (itemType === 'Perfume') {
+
+            selectedVolume = (volume || product.defaultVolume).toLowerCase().replace(" ", "");
+            price = product.prices instanceof Map
+                ? product.prices.get(selectedVolume)
+                : product.prices[selectedVolume];
+            console.log(price, selectedVolume)
+        }
+        else {
+            selectedVolume = product.volume;
+            price = product.price;
+        }
         await Cart.create({
             user: userId,
             item: itemId,
+            name: product.name,
             itemType,
-            volume: volume,
-            price: product.price,
+            volume: selectedVolume,
+            price: price,   
         });
         return res.status(201).json({
             status: "added",
