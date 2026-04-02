@@ -188,9 +188,9 @@ const CartSection = () => {
 
         <div className="h-px bg-gray-300 my-4" />
 
-        <button
+        <button disabled
           className="w-full bg-green-500 hover:bg-green-600
-            text-white font-semibold py-3 rounded-full transition"
+            text-white font-semibold py-3 rounded-full transition disabled:bg-green-400"
           onClick={() => {
             navigate('/checkout', {
               state: { cartId: cart[0]._id }
