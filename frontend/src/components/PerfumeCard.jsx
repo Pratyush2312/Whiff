@@ -208,6 +208,7 @@ const PerfumeCard = () => {
                     </div>
 
                     {/* ACTIONS */}
+                {/* <button>-</button> */}
                     <button
                         className="rounded border p-3 bg-black text-white"
                         onClick={() =>
@@ -220,6 +221,7 @@ const PerfumeCard = () => {
                             ? "Remove from Cart"
                             : "Add to Cart"}
                     </button>
+                    {/* <button>+</button> */}
                 </div>
             </div>
 

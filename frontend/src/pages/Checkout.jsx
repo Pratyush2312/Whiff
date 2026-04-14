@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
 const URL = import.meta.env.VITE_BACKEND_URL;
-
+const KEY = import.meta.env.VITE_KEY;
 const Checkout = () => {
     const [loading, setLoading] = useState(false);
     const location = useLocation()
@@ -35,7 +35,7 @@ const Checkout = () => {
 
             // 2️⃣ Razorpay options
             const options = {
-                key: "rzp_test_SLusQgLO3Ovu0C",     
+                key: KEY,     
                 amount: order.amount,
                 currency: order.currency,
                 name: "WHIFF",
@@ -50,7 +50,6 @@ const Checkout = () => {
                             credentials:'include',
                             headers: {
                                 "Content-Type": "application/json",
-                                // Authorization: `Bearer ${token}`,
                             },
                             body: JSON.stringify({
                                 razorpay_order_id: response.razorpay_order_id,
