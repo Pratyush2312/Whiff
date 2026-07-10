@@ -3,7 +3,60 @@ import { Cart } from "../models/cart.js"
 import { User } from "../models/user.js"
 import { Order } from "../models/order.js";
 import crypto from 'crypto';
+import { transporter } from "../config/transport.js";
 const secret = process.env.KEY_SECRET;
+
+const sendOrderEmail = async (userEmail, order) => {
+    const itemsList = order.items.map(
+        (item) => `${item.name} (${item.volume}) x${item.quantity}`
+    ).join("\n");
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: userEmail,
+        subject: "Order Confirmed 🎉",
+        text: `
+Order ID: ${order.orderId}
+
+Items:
+${itemsList}
+
+Total: ₹${order.totalAmount}
+
+Thank you for shopping with us!
+    `,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+const sendAdminEmail = async (order,user) => {
+    const itemsList = order.items.map(
+        (item) => `${item.name} (${item.volume}) x${item.quantity}`
+    ).join("\n");
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: process.env.ADMIN_EMAIL,
+        subject: "🛒 New Order Received",
+        text: `
+New Order Placed!
+
+Order ID: ${order.orderId}
+
+Items:
+${itemsList}
+
+Total: ₹${order.totalAmount}
+
+Customer ID: ${order.user}
+Address: ${user.address}
+    `,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
 export const createOrder = async (req, res) => {
     try {
         const userId = req.user
@@ -18,16 +71,12 @@ export const createOrder = async (req, res) => {
             .populate('item')
         // console.log(cart)
         const cartItems = await Cart.find({ user: userId });
-        console.log(Array.isArray(cartItems));
-        console.log(cartItems.length);
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" })
         }
 
 
-        // console.log("FULL CART:", cart);
-        // console.log("ITEMS:", cart.item);
-        // console.log("TYPE:", typeof cart.item);
+
 
         let subtotal = 0;
 
@@ -35,13 +84,12 @@ export const createOrder = async (req, res) => {
             subtotal += item.price * item.quantity;
         });
 
-        //    console.log(subtotal)
+
         let discount = 0;
         if (user.isFirstLogin) {
             discount = subtotal * 0.1;
         }
         let finalTotal = subtotal - discount;
-        console.log(finalTotal)
         const options = {
             amount: Math.round(finalTotal * 100),
             currency: 'INR',
@@ -71,7 +119,7 @@ export const verifypayment = async (req, res) => {
             });
         }
 
-        // ✅ Verified → continue flow
+        // Verified → continue flow
 
         const cartItems = await Cart.find({ user: userId });
 
@@ -81,11 +129,20 @@ export const verifypayment = async (req, res) => {
             });
         }
 
-        let totalamount = 0;
-        cartItems.forEach(item => {
-            totalamount += item.price * item.quantity;
-        })
 
+        let subtotal = 0;
+        cartItems.forEach(item => {
+            subtotal += item.price * item.quantity;
+        });
+
+        const userVerified = await User.findById(userId);
+
+        let discount = 0;
+        if (userVerified.isFirstLogin) {
+            discount = subtotal * 0.1;
+        }
+
+        let totalamount = subtotal - discount;
         const orderItems = cartItems.map((item) => ({
             item: item.itemType,
             name: item.name,
@@ -112,7 +169,10 @@ export const verifypayment = async (req, res) => {
             user.isFirstLogin = false;
             await user.save();
         }
+        await sendOrderEmail(user.email, newOrder);
 
+        // admin email
+        await sendAdminEmail(newOrder, user);
         return res.status(200).json({
             success: true,
             message: "Payment successful & order placed",
@@ -126,3 +186,25 @@ export const verifypayment = async (req, res) => {
         })
     }
 }
+
+// export const test = async (req, res) => {
+//     const user = await User.findOne(); // ya kisi specific user ko find karo
+
+//     const order = {
+//         orderId: "TEST123",
+//         totalAmount: 999,
+//         user: user._id,
+//         items: [
+//             {
+//                 name: "Perfume",
+//                 volume: "100ml",
+//                 quantity: 1,
+//             },
+//         ],
+//     };
+
+//     await sendAdminEmail(order, user);
+//     console.log(user);
+//     console.log(user.address);
+//     res.send("Email sent");
+// }

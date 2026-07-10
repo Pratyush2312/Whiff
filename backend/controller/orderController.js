@@ -26,7 +26,7 @@ export const getOrderById = async (req, res) => {
 
         const order = await Order.findOne({
             _id: orderId,
-            user: userId   // 🔥 important (security)
+            user: userId   
         });
         if (!order) {
             return res.status(404).json({

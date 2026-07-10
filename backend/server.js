@@ -48,16 +48,11 @@ app.use("/combos/:slug", comboRoute);
 app.use('/order',paymentRoute)
 app.use('/order/create-order', paymentRoute)
 app.use('order/verify-payment', paymentRoute)
+// app.use('/order/test-admin-email',paymentRoute)
 app.use('/api', orderRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/order/:orderId', orderRoute);
-// app.use("/api/upload", uploadRoute)
-
-// app.get('/perfumes',async (req,res)=>{
-//     const perfume=await Perfume.findOne({id:1})
-//     res.send(perfume)
-// })
 
 app.listen(PORT, () => {
-    console.log("Server is Live")
+    console.log("Server is Live", PORT);
 })
