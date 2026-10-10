@@ -19,11 +19,7 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: [
-        "https://whiffperfume.in",
-        "https://www.whiffperfume.in",
-        "http://localhost:5173"
-    ],
+    origin: URL,
     credentials: true
 }))
 app.use(cookieParser())
@@ -32,10 +28,6 @@ app.use("/uploads", express.static("uploads"));
 app.use('/perfumes', perfumeRoute)
 app.use('/perfumes/:slug', perfumeRoute)
 app.use('/account', userRoute)
-app.use('/account/signup', userRoute)
-app.use('/account/login', userRoute)
-app.use('/account/profile', userRoute)
-app.use('/account/logout', userRoute)
 app.use('/wishlist', wishlistRoute)
 app.use('/wishlist/add', wishlistRoute)
 app.use('/wishlist/:perfumeid', wishlistRoute)
