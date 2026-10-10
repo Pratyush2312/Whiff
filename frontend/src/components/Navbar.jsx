@@ -4,19 +4,35 @@ import { IoPersonOutline, IoHeartOutline, IoCartOutline } from "react-icons/io5"
 
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const handleAccountClick = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/account/me", {
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        navigate("/account");
+      } else {
+        navigate("/account/auth");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
  
   return (
     <header className="w-full">
 
-      {/* ───────── TOP UTILITY BAR ───────── */}
+     
       <div className="w-full bg-black text-white text-[11px] px-4 py-2 flex items-center justify-end">
         <div className="hidden sm:flex gap-4">
           <span className="cursor-pointer hover:underline"><a href=" https://chat.whatsapp.com/FoJVrMNdgdC4zhRPM0Cdfd" target="_blank">Connect with us</a></span>
         </div>
       </div>
 
-      {/* ───────── MAIN HEADER ───────── */}
+     
       <nav className="flex items-center justify-between px-4 sm:px-8 py-4 bg-white border-b">
 
         {/* LEFT : SEARCH (Desktop only)
@@ -31,7 +47,6 @@ const Navbar = () => {
           </div>
         </div> */}
 
-        {/* CENTER : LOGO */}
         <div className="flex justify-center flex-1 md:flex-none">
           <img
             src={logo}
@@ -45,7 +60,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4 sm:gap-6 text-sm">
           <button
             className="flex items-center gap-1 hover:text-black/80"
-            onClick={() => navigate("/account")}
+            onClick={handleAccountClick}
           >
             <IoPersonOutline className="text-xl" />
             <span className="hidden sm:inline">Account</span>

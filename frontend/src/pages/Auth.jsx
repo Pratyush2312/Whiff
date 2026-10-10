@@ -30,7 +30,6 @@ const Auth = () => {
                 phone,
                 address
             }
-            console.log("Function ke andar")
             const data = await fetch(`${URL}/account/signup`, {
                 method: 'POST',
                 credentials: 'include',

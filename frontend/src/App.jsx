@@ -16,12 +16,14 @@ import Order from "./pages/Order";
 import { Route, Routes, useLocation } from "react-router";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
+import { Analytics } from "@vercel/analytics/next";
 
 function App() {
   const location = useLocation();
 
   return (
     <>
+      <Analytics/>
       <Toaster position="top-center" reverseOrder={false} />
 
       <AnimatePresence mode="wait">
@@ -29,7 +31,7 @@ function App() {
 
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
           <Route path="/account" element={<PageWrapper><Account /></PageWrapper>} />
-          <Route path="/account/auth" element={<PageWrapper><Auth /></PageWrapper>} />
+          <Route path="/account/auth" element={<PageWrapper><Auth/></PageWrapper>} />
           <Route path="/combos" element={<PageWrapper><Combo /></PageWrapper>} />
           <Route path="/combo/:slug" element={<PageWrapper><ComboCard /></PageWrapper>} />
           <Route path="/wishlist" element={<PageWrapper><Wishlist /></PageWrapper>} />
