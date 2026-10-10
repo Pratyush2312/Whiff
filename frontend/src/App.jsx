@@ -16,7 +16,7 @@ import Order from "./pages/Order";
 import { Route, Routes, useLocation } from "react-router";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const location = useLocation();
