@@ -2,13 +2,13 @@ import { useNavigate } from "react-router";
 import logo from "../assets/logo.png";
 import { IoPersonOutline, IoHeartOutline, IoCartOutline } from "react-icons/io5";
 
-
+const URL = import.meta.env.VITE_BACKEND_URL;
 const Navbar = () => {
   const navigate = useNavigate();
 
   const handleAccountClick = async () => {
     try {
-      const res = await fetch("http://localhost:3000/account/me", {
+      const res = await fetch(`${URL}/account/me`, {
         credentials: "include",
       });
 
