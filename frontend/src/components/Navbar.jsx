@@ -1,12 +1,36 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  IoPersonOutline,
+  IoHeartOutline,
+  IoCartOutline,
+  IoArrowForwardOutline,
+} from "react-icons/io5";
+import { toast } from "react-hot-toast";
 import logo from "../assets/logo.png";
-import { IoPersonOutline, IoHeartOutline, IoCartOutline } from "react-icons/io5";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
+
+const navItems = [
+  { label: "Wishlist", icon: IoHeartOutline, path: "/wishlist" },
+  { label: "Cart", icon: IoCartOutline, path: "/cart" },
+];
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
 
+  const [checkingAccount, setCheckingAccount] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Update the visual state without adding a scroll listener.
+  // The header uses CSS styling until we explicitly wire scroll state.
   const handleAccountClick = async () => {
+    if (checkingAccount) return;
+
+    setCheckingAccount(true);
+
     try {
       const res = await fetch(`${URL}/account/me`, {
         credentials: "include",
@@ -14,78 +38,94 @@ const Navbar = () => {
 
       if (res.ok) {
         navigate("/account");
-      } else {
+      } else if (res.status === 401) {
         navigate("/account/auth");
+      } else {
+        toast.error("Unable to verify your account. Please try again.");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Account check failed:", error);
+      toast.error("Unable to connect. Please try again.");
+    } finally {
+      setCheckingAccount(false);
     }
   };
- 
-  return (
-    <header className="w-full">
 
-     
-      <div className="w-full bg-black text-white text-[11px] px-4 py-2 flex items-center justify-end">
-        <div className="hidden sm:flex gap-4">
-          <span className="cursor-pointer hover:underline"><a href=" https://chat.whatsapp.com/FoJVrMNdgdC4zhRPM0Cdfd" target="_blank">Connect with us</a></span>
-        </div>
+  return (
+    <header className="sticky top-0 z-50 w-full text-text-primary">
+      {/* Announcement strip */}
+      <div className="relative flex min-h-8 items-center justify-center bg-surface-dark px-4 py-2 text-center text-[9px] uppercase tracking-[0.18em] text-text-inverse sm:text-[10px]">
+        <a
+          href="https://chat.whatsapp.com/FoJVrMNdgdC4zhRPM0Cdfd"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 transition-colors duration-300 hover:text-brand-muted">
+          <span>Have a question? Connect with us</span>
+          <IoArrowForwardOutline
+            className="transition-transform duration-300 group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        </a>
       </div>
 
-     
-      <nav className="flex items-center justify-between px-4 sm:px-8 py-4 bg-white border-b">
-
-        {/* LEFT : SEARCH (Desktop only)
-        <div className="hidden md:flex items-center w-full max-w-sm">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search fragrances..."
-              className="w-full border rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-black/20"
-            />
-            <IoSearchOutline className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-600" />
-          </div>
-        </div> */}
-
-        <div className="flex justify-center flex-1 md:flex-none">
-          <img
-            src={logo}
-            alt="Whiff Logo"
-            className="w-20 sm:w-24 h-auto cursor-pointer"
-            onClick={() => navigate("/")}
-          />
-        </div>
-
-        {/* RIGHT : ICONS */}
-        <div className="flex items-center gap-4 sm:gap-6 text-sm">
+      {/* Main navigation */}
+      <nav
+        aria-label="Main navigation"
+        className="border-b border-border/70 bg-background/90 shadow-nav backdrop-blur-xl">
+        <div className="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between px-5 sm:h-[76px] sm:px-8 lg:px-12">
+          {/* Brand */}
           <button
-            className="flex items-center gap-1 hover:text-black/80"
-            onClick={handleAccountClick}
-          >
-            <IoPersonOutline className="text-xl" />
-            <span className="hidden sm:inline">Account</span>
+            type="button"
+            aria-label="Whiff home"
+            onClick={() => navigate("/")}
+            className="group relative shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
+            <motion.img
+              src={logo}
+              alt="Whiff"
+              initial={false}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.035 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="h-auto w-[66px] sm:w-[76px]"
+            />
           </button>
 
-          <button className="flex items-center gap-1 hover:text-black/80"
-          onClick={() => navigate("/wishlist")}
-          >
-            <IoHeartOutline className="text-xl" />
-            <span className="hidden sm:inline">Wishlist</span>
-          </button>
+          {/* Navigation actions */}
+          <div className="flex items-center gap-1 sm:gap-3">
+            <motion.button
+              type="button"
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+              onClick={handleAccountClick}
+              disabled={checkingAccount}
+              aria-label={checkingAccount ? "Checking account" : "Account"}
+              className="group inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-text-primary transition-colors duration-300 hover:bg-surface-secondary hover:text-brand disabled:cursor-wait disabled:opacity-60 sm:px-3">
+              <IoPersonOutline
+                className="text-[19px] transition-transform duration-300 group-hover:-translate-y-0.5"
+                aria-hidden="true"
+              />
+              <span className="hidden text-xs sm:inline">
+                {checkingAccount ? "Checking..." : "Account"}
+              </span>
+            </motion.button>
 
-          <button className="flex items-center gap-1 hover:text-black/80" onClick={()=>{navigate('/cart')}}>
-            <IoCartOutline className="text-xl" />
-            <span className="hidden sm:inline">Cart</span>
-          </button>
+            {navItems.map(({ label, icon: Icon, path }) => (
+              <motion.button
+                key={label}
+                type="button"
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                onClick={() => navigate(path)}
+                aria-label={label}
+                className="group inline-flex min-h-10 items-center gap-2 rounded-full px-2.5 text-text-primary transition-colors duration-300 hover:bg-surface-secondary hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:px-3">
+                <Icon
+                  className="text-[19px] transition-transform duration-300 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+                <span className="hidden text-xs sm:inline">{label}</span>
+              </motion.button>
+            ))}
+          </div>
         </div>
-
       </nav>
-
-      {/* ───────── CATEGORY NAV ───────── */}
-      
-
     </header>
-
   );
 };
 
